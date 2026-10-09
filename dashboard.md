@@ -2,7 +2,7 @@
 
 Dương Thị Hồng Viên · 2A202602385 · B2C · 09/10/2026
 
-**TÌNH HUỐNG GIẢ ĐỊNH — chưa có dữ liệu thực đo.** Ngưỡng [MH] từ mô hình minh họa; số hiện tại N/A.
+**Dữ liệu hiện tại: chưa đo.** Ngưỡng [MH] từ mô hình minh họa; số hiện tại N/A.
 
 **North Star:** L1, mức rơi D30→D60; mục tiêu ≤2 điểm %. Cá nhân tự trả tiền và tự ôn trên web ÔnNhớ AI, không có trung gian.
 

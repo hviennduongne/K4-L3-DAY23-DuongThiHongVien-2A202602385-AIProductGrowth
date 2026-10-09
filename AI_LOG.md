@@ -8,7 +8,7 @@
 
 Sau khi đọc lý thuyết, em hiểu bài này cần chọn những chỉ số giúp phát hiện vấn đề sớm và viết sẵn cách xử lý. Nếu chỉ nhìn doanh thu thì có thể đến lúc doanh thu giảm mới biết người dùng đã bỏ sản phẩm từ trước.
 
-Em dùng tình huống ÔnNhớ AI, một sản phẩm tạo câu hỏi ôn tập từ ghi chú. Em chọn B2C vì người học tự trả tiền và trực tiếp sử dụng. Sản phẩm và số liệu trong bài là giả định để thực hành. Các nội dung tài chính và Cost/Job được nhắc trong lộ trình Day 24–25 chưa được học, nên ở bài này em ghi rõ đầu vào giả định và trình bày phép tính để giải thích ngưỡng.
+Em chọn sản phẩm ÔnNhớ AI, một sản phẩm tạo câu hỏi ôn tập từ ghi chú. Em chọn B2C vì người học tự trả tiền và trực tiếp sử dụng. Sản phẩm và số liệu trong bài là giả định để thực hành. Các nội dung tài chính và Cost/Job được nhắc trong lộ trình Day 24–25 chưa được học, nên ở bài này em ghi rõ đầu vào giả định và trình bày phép tính để giải thích ngưỡng.
 
 ## 2. Quá trình làm bài
 
@@ -46,7 +46,7 @@ Khi rà lại Trạm 5, em tách bảng đèn thành ba tầng và sửa quyết
 
 Ở lần kiểm tra cuối, em thêm bảng ARPU, GM, CAC, payback, runway và Cost/Job ngay đầu worksheet, rồi viết rõ ba câu trả lời để chốt B2C. Em tách phần xử lý refund ra khỏi luật 3 để mỗi luật có một điều kiện chính. Em cũng sửa đường liên hệ của retention: số đo ở D60 giúp báo trước kết quả những tháng tiếp theo, không thể báo trước conversion đã xảy ra ở D14 của cùng nhóm.
 
-Bản cuối đạt **26/26 kiểm tra**; PDF vẫn có dashboard một trang và phụ lục một trang. Kết quả kiểm tra trên là kiểm tra tài liệu và phép tính. Các chỉ số hiện tại vẫn để N/A vì bài chưa có dữ liệu người dùng thực tế. Các luật xử lý và cổng 90 ngày là kế hoạch vận hành cho tình huống này.
+Bản cuối đạt **26/26 kiểm tra**; PDF vẫn có dashboard một trang và phụ lục một trang. Kết quả kiểm tra trên là kiểm tra tài liệu và phép tính. Các chỉ số hiện tại vẫn để N/A vì bài chưa có dữ liệu người dùng thực tế. Các luật xử lý và cổng 90 ngày là kế hoạch vận hành cho mô hình này.
 
 ## 6. Điều em rút ra
 

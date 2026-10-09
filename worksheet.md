@@ -19,13 +19,13 @@ Các số là giả định riêng cho bài thực hành, chưa phải số đã
 
 ## Trạm 1 — Chốt loại
 
-**Câu chốt loại:** ÔnNhớ AI là B2C vì cá nhân tự trả phí và trực tiếp ôn tập, em chạm người dùng qua web ÔnNhớ AI và log tài khoản ẩn danh, không có doanh nghiệp hay đối tác trung gian trong tình huống này.
+**Câu chốt loại:** ÔnNhớ AI là B2C vì cá nhân tự trả phí và trực tiếp ôn tập, em chạm người dùng qua web ÔnNhớ AI và log tài khoản ẩn danh, không có doanh nghiệp hay đối tác trung gian trong mô hình này.
 
 - Ai trả tiền? Cá nhân mua gói ôn tập.
 - Ai dùng? Chính người mua.
 - Có trung gian và chạm end-user không? Không có trung gian; tiếp xúc trực tiếp qua web.
 
-Em dùng tình huống ÔnNhớ AI và số liệu giả định để thực hành Day 23. Day 24–25 là nội dung trong lộ trình chưa được học; các đầu vào dưới đây được đặt ngay trong bài này, chưa phải số thực đo.
+Em chọn sản phẩm ÔnNhớ AI và số liệu giả định để thực hành Day 23. Day 24–25 là nội dung trong lộ trình chưa được học; các đầu vào dưới đây được đặt ngay trong bài này, chưa phải số thực đo.
 
 - Sản phẩm: ÔnNhớ AI, tạo phiên ôn 5 câu kèm giải thích từ ghi chú; cá nhân tự mua và dùng trên web → B2C.
 - Value metric: thuê bao 200.000đ/tháng, quota dự kiến 250 phiên; credit riêng cho phần vượt. Free ban đầu 5 phiên/tuần.

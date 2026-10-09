@@ -1,12 +1,12 @@
 # Day 23 — ÔnNhớ AI
 Học viên: **Dương Thị Hồng Viên** · MSSV: **2A202602385** · Ngày làm: 09/10/2026.
-Tình huống giả định B2C: cá nhân tự trả tiền và tự dùng web ôn tập; chưa có khách hoặc dữ liệu vận hành thật.
+Mô hình B2C: cá nhân tự trả tiền và tự dùng web ôn tập; chưa có khách hoặc dữ liệu vận hành thật.
 Bài làm: [worksheet](worksheet.md), [dashboard](dashboard.md), [PDF](dashboard.pdf), [AI Log](AI_LOG.md), [kết quả kiểm tra](evidence/validation.json).
 Tên repo khi nộp: `K4-L3-DAY23-DuongThiHongVien-2A202602385-AIProductGrowth`. Repo cá nhân: https://github.com/hviennduongne/K4-L3-DAY23-DuongThiHongVien-2A202602385-AIProductGrowth · Chưa nộp LMS.
 
 ## Phạm vi và tài liệu
 Tôi giữ tài liệu gốc trong folder. Slide `D:/AIthucchien/track1/day7.pdf` ghi Day 26, nhưng README/HANDBOOK xác nhận bài trong repo là Day 23 theo cách đánh số của lớp. Tôi dùng yêu cầu repo để chốt đầu ra.
-Em dùng tình huống ÔnNhớ AI và số liệu giả định để thực hành Day 23. Day 24–25 là nội dung trong lộ trình chưa được học; các đầu vào dưới đây được đặt ngay trong bài này, chưa phải số thực đo.
+Em chọn sản phẩm ÔnNhớ AI và số liệu giả định để thực hành Day 23. Day 24–25 là nội dung trong lộ trình chưa được học; các đầu vào dưới đây được đặt ngay trong bài này, chưa phải số thực đo.
 
 - Sản phẩm: ÔnNhớ AI, tạo phiên ôn 5 câu kèm giải thích từ ghi chú; cá nhân tự mua và dùng trên web → B2C.
 - Value metric: thuê bao 200.000đ/tháng, quota dự kiến 250 phiên; credit riêng cho phần vượt. Free ban đầu 5 phiên/tuần.
