@@ -1,64 +1,20 @@
-# Day 23 — Đèn nào bật trước? · Operating Dashboard
+# Day 23 — ÔnNhớ AI
+Học viên: **Dương Thị Hồng Viên** · MSSV: **2A202602385** · Ngày làm: 09/10/2026.
+Tình huống giả định B2C: cá nhân tự trả tiền và tự dùng web ôn tập; chưa có khách hoặc dữ liệu vận hành thật.
+Bài làm: [worksheet](worksheet.md), [dashboard](dashboard.md), [PDF](dashboard.pdf), [AI Log](AI_LOG.md), [kết quả kiểm tra](evidence/validation.json).
+Tên repo khi nộp: `K4-L3-DAY23-DuongThiHongVien-2A202602385-AIProductGrowth`. Repo cá nhân: https://github.com/hviennduongne/K4-L3-DAY23-DuongThiHongVien-2A202602385-AIProductGrowth · Chưa nộp LMS.
 
-> **Bài cá nhân.** Mỗi học viên tự làm và tự nộp repo của mình (xem [SUBMISSION.md](SUBMISSION.md)).
-> **Không phải bài lập trình.** Không cần cài gì, không cần API key — chỉ cần Markdown và số liệu của sản phẩm bạn.
+## Phạm vi và tài liệu
+Tôi giữ tài liệu gốc trong folder. Slide `D:/AIthucchien/track1/day7.pdf` ghi Day 26, nhưng README/HANDBOOK xác nhận bài trong repo là Day 23 theo cách đánh số của lớp. Tôi dùng yêu cầu repo để chốt đầu ra.
+Em dùng tình huống ÔnNhớ AI và số liệu giả định để thực hành Day 23. Day 24–25 là nội dung trong lộ trình chưa được học; các đầu vào dưới đây được đặt ngay trong bài này, chưa phải số thực đo.
 
-Đến giờ bạn đã có mô hình tài chính (LTV, CAC, payback, NPV…) và Cost/Job của sản phẩm. Những con số đó là **bảng điểm**: chỉ biết đúng sai sau nhiều tháng. Hôm nay bạn dựng **bảng điều khiển**: vài chỉ số **báo trước** cho mô hình loại của bạn, mỗi chỉ số có ngưỡng 🟢🟡🔴 có lý do, và **luật viết sẵn** phải làm gì (và cấm làm gì) khi đèn đỏ.
+- Sản phẩm: ÔnNhớ AI, tạo phiên ôn 5 câu kèm giải thích từ ghi chú; cá nhân tự mua và dùng trên web → B2C.
+- Value metric: thuê bao 200.000đ/tháng, quota dự kiến 250 phiên; credit riêng cho phần vượt. Free ban đầu 5 phiên/tuần.
+- Cost/Job giả định: 400đ/phiên gồm cả retry trung bình; nhóm paid thông thường 100 phiên/tháng → AI 40.000đ; chi phí phục vụ khác 20.000đ/paid/tháng.
+- Kịch bản 100 paid: doanh thu thuần 20 triệu, paid COGS 6 triệu, ngân sách free 2 triệu → tổng COGS 8 triệu, GM 60%. Quy mô và giá trị này chưa đo.
+- Chi phí mỗi trial (marketing + free trong trial) 6.000đ; không cộng lại khoản này vào CAC một lần nữa. Chi phí R&D/nhân sự cố định 30 triệu/tháng; tiền mặt 180 triệu → runway kịch bản không thu tiền 6 tháng, không phải runway đã kiểm toán.
+- CAC kỳ vọng ở conversion 6% = 6.000/0,06 =100.000đ; payback theo GM bình quân 60% =100.000/120.000=0,833 tháng. Mục tiêu ≤1 tháng. Không ước tính LTV khi chưa có lịch sử retention.
+- Tất cả ngưỡng dùng [MH] từ giả định, không dùng [BM], không có baseline [TB] thực đo. Màu hiện tại luôn N/A, không gán xanh cho số chưa có.
 
-## Mục tiêu học tập
-
-Sau bài này bạn làm được:
-
-1. Xác định đúng sản phẩm mình là **B2C, B2B hay B2B2C** theo thực tế hôm nay, và biết "đèn bật trước" của loại đó.
-2. Xếp chỉ số vào 3 tầng **Leading · Operating · Lagging** và chỉ ra mỗi đèn báo sớm báo trước cho đèn nào.
-3. Đặt ngưỡng có nguồn: benchmark có ngày kiểm tra **[BM]**, suy ngược từ mô hình của bạn **[MH]**, hoặc tự đo baseline **[TB]**.
-4. Viết 5 luật quyết định dạng **NẾU – TRONG – (VÀ) – THÌ – KHÔNG THÌ**, trong đó ít nhất 2 luật bảo bạn **dừng** một việc.
-5. Đặt 3 cổng gác ngày 30/60/90 (GO · FIX · PIVOT · KILL) và kill criteria.
-
-**Đầu ra:** một `Operating Dashboard` **1 trang** + phụ lục ≤1 trang cho các phép tính [MH].
-
-## Chuẩn bị
-
-| Cần có | Dùng để |
-|---|---|
-| Số liệu mô hình tài chính của bạn: ARPU, gross margin, CAC, payback mục tiêu, runway | Suy ngưỡng [MH] |
-| Value Metric và **Cost/Job** của sản phẩm (chi phí AI cho một việc) | Đèn chi phí AI, ngưỡng [MH] |
-| Tài khoản GitHub + trình xem Markdown (VS Code, GitHub web…) | Làm và nộp bài |
-| Một chatbot AI bất kỳ (tuỳ chọn) | Chạy prompt phản biện ở [HANDBOOK §5](HANDBOOK.md#5-prompts-cho-ai-english-only) |
-
-Chưa có mô hình tài chính hoặc Cost/Job? Bạn vẫn đọc và làm được Trạm 1–2, nhưng **không đạt** Trạm 3 vì cần ít nhất 2 ngưỡng [MH] tính từ số của chính bạn.
-
-## Bắt đầu trong 3 phút
-
-1. Tạo repo **mới** trên GitHub tên `K4-L3-DAY23-HoVaTen-MSSV-AIProductGrowth` (quy tắc ở [SUBMISSION.md](SUBMISSION.md)).
-2. Copy 2 file mẫu trong [`templates/`](templates/) vào repo của bạn:
-   - [`worksheet.md`](templates/worksheet.md) — nháp làm việc cho Trạm 1–4 (thẻ đèn đầy đủ, phép tính [MH]).
-   - [`dashboard.md`](templates/dashboard.md) — bản 1 trang cuối cùng (Trạm 5).
-3. Đọc [HANDBOOK §2](HANDBOOK.md#2-hệ-chẩn-đoán) trong 10 phút, rồi làm lần lượt theo [CHECKPOINTS.md](CHECKPOINTS.md).
-
-## Thời lượng — 120 phút, 5 trạm
-
-| Trạm | Việc | Thời gian |
-|---|---|---|
-| 1 | Chốt loại mô hình & lấy bảng đèn | 15' |
-| 2 | Dựng cây 3 tầng (6–8 thẻ đèn) | 25' |
-| 3 | **Đặt ngưỡng** — mỗi đèn có nguồn và lý do | 30' ⭐ |
-| 4 | **Viết 5 luật quyết định** — ≥2 luật dừng | 30' ⭐ |
-| 5 | Cổng gác 90 ngày & ráp dashboard 1 trang | 20' |
-
-Bấm giờ từng trạm. Hết giờ thì sang trạm sau, quay lại hoàn thiện ở Trạm 5.
-
-## Tài liệu trong repo
-
-| File | Đọc khi nào |
-|---|---|
-| [HANDBOOK.md](HANDBOOK.md) | Kiến thức nền, 3 bảng đèn B2C/B2B/B2B2C, prompt AI, nguồn số liệu. **Chỉ đọc phần §3 của loại mình.** |
-| [CHECKPOINTS.md](CHECKPOINTS.md) | Hướng dẫn từng trạm: làm gì, ra sản phẩm gì, tự kiểm tra thế nào |
-| [SUBMISSION.md](SUBMISSION.md) | Tên repo, file phải nộp, deadline, checklist trước khi nộp |
-| [RUBRIC.md](RUBRIC.md) | Tiêu chí chấm 100 điểm và các điều kiện mất điểm |
-| [RULES.md](RULES.md) | Quy định dùng AI, sao chép, nộp muộn, bảo mật số liệu |
-
-> **Ba câu cần nhớ nếu quên hết mọi thứ khác:**
-> **B2C** — đèn bật trước là đường cong retention có phẳng không.
-> **B2B** — đèn bật trước là time-to-first-value.
-> **B2B2C** — đèn bật trước là partner activation. Ký được không phải là thắng.
+## Tái tạo và kiểm tra
+Chạy `python scripts/build_lab.py` với Python có reportlab và pypdf. Script dựng các tài liệu, kiểm tra phép tính/boundary và ghi kết quả vào evidence/validation.json. Đây là kiểm tra bài làm trên số giả định, không phải chạy thử app hay đo user thật. PDF trang 1 là dashboard; trang 2 là phép tính.
