@@ -17,7 +17,7 @@ SID = '2A202602385'
 START = date(2026, 10, 9)
 dates = [(START + timedelta(days=n)).strftime('%d/%m/%Y') for n in (30,60,90)]
 metrics = [
- ('L1','L','Mức rơi retention D30→D60','max(0, R30−R60), điểm %; cohort đăng ký theo tuần, hoạt động = hoàn thành ≥1 phiên ôn 5 câu trong cửa sổ D24–30 / D54–60; loại test, bot, trùng ID; mẫu số cố định là user đăng ký ban đầu.','Tuần; Viên','≤2 điểm %','>2 đến 5 điểm %','>5 điểm %','[MH]','200 user: chấp nhận mất tối đa 10 người sau D30; mục tiêu chỉ mất 4.','Trial→paid, GM','1'),
+ ('L1','L','Mức rơi retention D30→D60','max(0, R30−R60), điểm %; cohort đăng ký theo tuần, hoạt động = hoàn thành ≥1 phiên ôn 5 câu trong cửa sổ D24–30 / D54–60; loại test, bot, trùng ID; mẫu số cố định là user đăng ký ban đầu.','Tuần; Viên','≤2 điểm %','>2 đến 5 điểm %','>5 điểm %','[MH]','200 user: chấp nhận mất tối đa 10 người sau D30; mục tiêu chỉ mất 4.','GM các tháng tiếp theo','1'),
  ('L2','L','Activation 24 giờ','User mới hoàn thành và xem giải thích phiên ôn 5 câu trong 24h / user mới hợp lệ; loại test, bot; không đếm mở app hoặc tạo bài chưa xong.','Ngày; Viên','≥60%','40% đến <60%','<40%','[MH]','100 user/tuần; hỗ trợ được 40 người chưa activation, tối đa 60 khi dành thêm buổi hỗ trợ.','Trial→paid','5'),
  ('L3','L','p95 AI cost / ARPU','p95 nearest-rank của tổng chi phí AI mỗi user trả phí trong 30 ngày / 200.000đ; gồm lượt lỗi và retry có tính tiền, loại test; free đo riêng.','Tuần, cửa sổ 30 ngày; Viên','≤40%','>40% đến 50%','>50%','[MH]','GM mỗi user tối thiểu 40%, chi phí khác 10%: AI tối đa 50%; mục tiêu GM 50% cho nhóm nặng cho trần 40%.','GM','2'),
  ('O1','O','Trial→paid','User hết trial 7 ngày và có thanh toán thành công trong 7 ngày tiếp / user hết trial có cửa sổ đủ 14 ngày; loại test; trả phí tính một lần/user.','Tuần theo cohort đã chín; Viên','≥6%','5% đến <6%','<5%','[MH]','Chi phí thu hút + phục vụ trial 6.000đ; lãi gộp tháng đầu/paid 120.000đ: cần 5%, mục tiêu 6% có dư 20%.','CAC payback, GM','3'),
@@ -28,7 +28,7 @@ metrics = [
 rules = [
  '⏹ NẾU L1 >5 điểm % TRÊN 2 cohort liên tiếp đã đủ D60 VÀ mỗi cohort ≥200 user THÌ dừng ads 21 ngày, sửa phiên ôn đầu và nhắc ôn; KHÔNG THÌ không tăng ads để bù người rời.',
  'NẾU L3 >50% TRONG 30 ngày VÀ có ≥100 user trả phí THÌ áp quota 250 phiên/tháng, chuyển lượt vượt quota sang gói credit trong 7 ngày; KHÔNG THÌ không tăng giá mọi user. Kiểm tra thêm nhóm top 5% để không bỏ sót đuôi sau p95.',
- 'NẾU O1 <5% TRÊN 3 cohort trial đã chín VÀ mỗi cohort ≥100 user THÌ thử paywall sau phiên ôn thành công trong 14 ngày; KHÔNG THÌ không giảm giá gói. Nếu O3 >5% TRÊN ≥100 giao dịch đủ 30 ngày, xử lý 10 phản hồi refund và sửa lời hứa paywall trong 7 ngày, không che refund khỏi báo cáo.',
+ 'NẾU O1 <5% TRÊN 3 cohort trial đã chín VÀ mỗi cohort ≥100 user THÌ thử paywall sau phiên ôn thành công trong 14 ngày; KHÔNG THÌ không giảm giá gói.',
  '⏹ NẾU O2 >25% TRONG 2 tháng liên tiếp VÀ mỗi tháng ≥100 paid THÌ dừng cấp quota free mới, giảm free xuống 3 phiên/tuần trong 7 ngày; KHÔNG THÌ không mở thêm free để lấy lượt đăng ký.',
  'NẾU L2 <40% TRONG 2 tuần liên tiếp VÀ mỗi tuần ≥100 user mới THÌ rút onboarding còn chọn chủ đề → ôn 5 câu, thử với 10 người trong 7 ngày; KHÔNG THÌ không thêm tính năng để che lỗi onboarding.',
 ]
@@ -62,6 +62,17 @@ gate_policy = 'GO khi đạt ngưỡng và đủ mẫu → sang chặng sau; FIX
 def table(headers, rows):
  return '| '+' | '.join(headers)+' |\n|'+'|'.join(['---']*len(headers))+'|\n'+'\n'.join('| '+' | '.join(row)+' |' for row in rows)+'\n'
 
+inputs = table(['Đầu vào của mô hình giả định','Giá trị','Căn cứ'],[
+ ('ARPU','200.000đ/paid/tháng','Giá gói giả định; không tính free'),
+ ('Gross margin mục tiêu','60%','20 triệu doanh thu −8 triệu COGS'),
+ ('CAC dự kiến','100.000đ/paid','6.000đ/trial ÷6% conversion'),
+ ('CAC payback mục tiêu','≤1 tháng','Mục tiêu thu hồi chi phí thu hút trong tháng đầu'),
+ ('CAC payback dự kiến','0,833 tháng','100.000 ÷(200.000 ×60%)'),
+ ('Runway kịch bản không có doanh thu','6 tháng','180 triệu tiền mặt ÷30 triệu burn/tháng'),
+ ('Value Metric','Thuê bao/tháng, quota250 phiên','Credit riêng cho lượt vượt quota'),
+ ('Cost/Job','400đ/phiên ôn5 câu','Chi phí AI giả định, gồm retry; hạ tầng/hỗ trợ tính riêng'),
+])
+
 readme = f'''# Day 23 — ÔnNhớ AI
 Học viên: **{NAME}** · MSSV: **{SID}** · Ngày làm: 09/10/2026.
 Tình huống giả định B2C: cá nhân tự trả tiền và tự dùng web ôn tập; chưa có khách hoặc dữ liệu vận hành thật.
@@ -76,17 +87,18 @@ Chạy `python scripts/build_lab.py` với Python có reportlab và pypdf. Scrip
 '''
 (ROOT/'README.md').write_text(readme,encoding='utf-8')
 inventory = [('Retention curve','🔧','tracking thiết kế được trong 2 tuần, D60 phải chờ đủ tuổi cohort'),('Activation','🔧','event hoàn thành và xem giải thích; baseline sau 2 tuần'),('p95 cost / ARPU','🔧','usage ledger theo user; cần cửa sổ 30 ngày'),('Trial→paid','🔧','trial và billing; chờ đủ 14 ngày'),('Retention M12','❌','biết cách đo nhưng chưa có cohort 12 tháng; 09/10/2027 mới có'),('Free / COGS','🔧','usage free/paid và sổ chi phí tháng'),('Refund','🔧','payment/refund; chờ cửa sổ30 ngày'),('LTV/CAC · payback · GM','🔧','chỉ mô hình tính được; GM/payback đối chiếu chi phí; LTV chưa kết luận')]
-worksheet = f'# Worksheet — ÔnNhớ AI\n\n{NAME} · {SID} · 09/10/2026\n\n## Trạm 1 — Chốt loại\n\n{assumptions}\n'+table(['Đèn trong bảng B2C','Trạng thái','Vị trí / cần gì'],inventory)
+worksheet = f'# Worksheet — ÔnNhớ AI\n\n{NAME} · {SID} · 09/10/2026\n\n## Chuẩn bị — Số liệu đầu vào\n\nCác số là giả định riêng cho bài thực hành, chưa phải số đã đo.\n\n{inputs}\n## Trạm 1 — Chốt loại\n\n**Câu chốt loại:** ÔnNhớ AI là B2C vì cá nhân tự trả phí và trực tiếp ôn tập, em chạm người dùng qua web ÔnNhớ AI và log tài khoản ẩn danh, không có doanh nghiệp hay đối tác trung gian trong tình huống này.\n\n- Ai trả tiền? Cá nhân mua gói ôn tập.\n- Ai dùng? Chính người mua.\n- Có trung gian và chạm end-user không? Không có trung gian; tiếp xúc trực tiếp qua web.\n\n{assumptions}\n'+table(['Đèn trong bảng B2C','Trạng thái','Vị trí / cần gì'],inventory)
 worksheet += '\nKhông có đèn ✅ thực đo. 🔧 nghĩa là có thể xây khả năng thu thập trong 2 tuần, không phải đã có giá trị. Retention M12 chưa thể đo trong thời gian lab. Tôi chọn B2C theo tình huống, không khẳng định đây là sản phẩm thực tế của tôi.\n\n## Trạm 2 — Thẻ đèn\n\nNorth Star: L1, mức rơi retention D30→D60; hiện tại N/A, mục tiêu ≤2 điểm %. Đây là đại diện độ phẳng ngắn hạn, chưa chứng minh retention dài hạn.\n'
 worksheet += table(['ID','Tầng','Đèn','Định nghĩa và công thức','Nhịp / người đo','Báo trước cho','Luật'],[(m[0],m[1],m[2],m[3],m[4],m[10],m[11]) for m in metrics])
-worksheet += '\nCây tín hiệu: L1/L2 → O1 → G1; L3 → G1; O2/O3 → G1. Có 3 Leading, 3 Operating, 1 Lagging; L3 là đèn AI. G1 là kết quả đối chiếu, không gán cho nó khả năng dự báo.\n\n## Trạm 3 — Ngưỡng\n'+table(['ID','Xanh','Vàng','Đỏ','Nguồn','Lý do'],[(m[0],*m[5:10]) for m in metrics])+'\n### Phụ lục [MH]\n\n'+appendix
+worksheet += '\nCây tín hiệu: L2 → O1 → G1; L1 → G1 các tháng tiếp theo; L3 → G1; O2/O3 → G1. Có 3 Leading, 3 Operating, 1 Lagging; L3 là đèn AI. G1 là kết quả đối chiếu, không gán cho nó khả năng dự báo.\n\n## Trạm 3 — Ngưỡng\n\n'+table(['ID','Xanh','Vàng','Đỏ','Nguồn','Lý do'],[(m[0],*m[5:10]) for m in metrics])+'\n### Phụ lục [MH]\n\n'+appendix
 worksheet += '\nNgưỡng [MH] tính từ đầu vào giả định của bài này. Dự báo 6% chưa phải conversion đã quan sát. Không dùng [BM] nên không có benchmark cần ngày kiểm tra.\n\n## Trạm 4 — Luật\n\n'+'\n\n'.join(f'{i}. {r}' for i,r in enumerate(rules,1))
-worksheet += '\n\nMàu đỏ chỉ khởi động luật khi đủ thời gian/mẫu; mẫu thiếu ghi N/A. Không gộp cohort có mức giá hoặc quota khác nhau. O3 là guardrail bổ sung trong luật 3, G1 đỏ truy lại luật 2/4 và cập nhật mô hình.\n\n## Trạm 5 — Cổng gác\n'+table(['Ngày','Một metric','Ngưỡng','Bằng chứng phải có','Nếu trượt'],gates)+f'\n{gate_policy} Ghi quyết định và lần FIX trong decision_log.md. Các file bằng chứng là đầu ra tương lai, chưa tồn tại. Mốc tính từ09/10/2026 +30/+60/+90 ngày. Cổng30 lấy200 bản ghi để tính baseline activation (kể cả user chưa activation), không phải200 người activation thành công; cổng60 dùng trần mất10/200=5 điểm %; cổng90 dùng conversion hòa vốn6.000/120.000=5%.\n\n**KILL CRITERIA:** {kill}\n\n**CHƯA ĐO ĐƯỢC:** {unknown}\n'
+worksheet += '\n\n**Người thực hiện:** Viên ghi nhận dữ liệu và bắt đầu hành động trong tuần chỉ số đủ điều kiện đỏ; thời hạn hoàn thành ghi ngay trong từng luật. Luật 1 dừng ads ngay khi kích hoạt, dành21 ngày sửa phiên ôn; luật4 dừng quota mới ngay và hoàn tất chỉnh free trong7 ngày.\n\nMàu đỏ chỉ khởi động luật khi đủ thời gian/mẫu; mẫu thiếu ghi N/A. Không gộp cohort có mức giá hoặc quota khác nhau. O3 đỏ: Viên tổng hợp10 phản hồi hoàn tiền trong7 ngày và sửa lời hứa trên paywall; không bỏ giao dịch refund khỏi số liệu. G1 đỏ: Viên đối soát doanh thu/COGS trong7 ngày, xác định phần AI/free cần cắt theo luật2/4, không tăng ads để bù biên lãi. Đây là cách xử lý bổ sung của thẻ đèn, không thêm luật thứ6.\n\n**Quy ước đo:** các công thức tỷ lệ nhân100 để biểu diễn%; mẫu số0 hoặc cửa sổ chưa đủ thì N/A. p95 nearest-rank là giá trị thứceil(0,95×n) sau khi sắp chi phí tăng dần; chỉ dùng user trả phí có đủ30 ngày. ARPU trong L3 là mức giá giả định200.000đ; nếu giá/doanh thu đổi phải cập nhật mẫu số. L1 ởD60 không thể dự báo conversion đã xảy ra ởD14 của cùng cohort; nó giúp kiểm tra giả định giữ chân cho các cohort tuyển tiếp và GM/gia hạn tương lai.\n\n## Trạm 5 — Cổng gác\n\n'+table(['Ngày','Một metric','Ngưỡng','Bằng chứng phải có','Nếu trượt'],gates)+f'\n{gate_policy} Ghi quyết định và lần FIX trong decision_log.md. Các file bằng chứng là đầu ra tương lai, chưa tồn tại. Mốc tính từ09/10/2026 +30/+60/+90 ngày. Cổng30 lấy200 bản ghi để tính baseline activation (kể cả user chưa activation), không phải200 người activation thành công; cổng60 dùng trần mất10/200=5 điểm %; cổng90 dùng conversion hòa vốn6.000/120.000=5%.\n\n**KILL CRITERIA:** {kill}\n\n**CHƯA ĐO ĐƯỢC:** {unknown}\n'
 (ROOT/'worksheet.md').write_text(worksheet,encoding='utf-8')
 dashboard = f'# OPERATING DASHBOARD — ÔnNhớ AI\n\n{NAME} · {SID} · B2C · 09/10/2026\n\n**TÌNH HUỐNG GIẢ ĐỊNH — chưa có dữ liệu thực đo.** Ngưỡng [MH] từ mô hình minh họa; số hiện tại N/A.\n\n**North Star:** L1, mức rơi D30→D60; mục tiêu ≤2 điểm %. Cá nhân tự trả tiền, tự dùng web.\n'
 for tier,label in [('L','Leading — báo sớm'),('O','Operating — vận hành'),('G','Lagging — kết quả')]:
  dashboard += '\n## '+label+'\n\n'+table(['Đèn','Hiện','Xanh / Vàng / Đỏ','Nguồn và lý do','Báo trước'],[(m[0]+' '+m[2],'N/A',' / '.join(m[5:8]),m[8]+' '+m[9],m[10]) for m in metrics if m[1]==tier])
 dashboard += '\n## 5 luật (⏹ = dừng)\n\n'+'\n\n'.join(f'{i}. {r}' for i,r in enumerate(rules,1))+'\n\n## Cổng 90 ngày\n\n'+table(['Ngày','Metric','Qua cổng','Bằng chứng','Trượt'],gates)+f'\n{gate_policy}\n\n**KILL CRITERIA:** {kill}\n\n**CHƯA ĐO ĐƯỢC:** {unknown}\n'
+dashboard = dashboard.replace('Cá nhân tự trả tiền, tự dùng web.','Cá nhân tự trả tiền và tự ôn trên web ÔnNhớ AI, không có trung gian.').replace('## 5 luật (⏹ = dừng)','## 5 luật (⏹ = dừng; Viên thực hiện ngay khi đủ điều kiện)')
 (ROOT/'dashboard.md').write_text(dashboard,encoding='utf-8')
 
 pdfmetrics.registerFont(TTFont('Arial','C:/Windows/Fonts/arial.ttf'))
@@ -118,7 +130,7 @@ para('TÌNH HUỐNG GIẢ ĐỊNH; chưa có user/log thật. Cá nhân tự tr�
 for tier,label in [('L','LEADING — báo sớm'),('O','OPERATING — vận hành'),('G','LAGGING — kết quả')]:
  para(label,8,True)
  pdf_table(['Đèn (hiện tại N/A)','Xanh / Vàng / Đỏ','Nguồn, lý do → kết quả'],[(m[0]+' '+m[2],' / '.join(m[5:8]),m[8]+' '+m[9]+' → '+m[10]) for m in metrics if m[1]==tier],[125,143,W-318])
-para('5 LUẬT — [DỪNG] = đóng băng một hoạt động',9,True)
+para('5 LUẬT — [DỪNG] = luật dừng; Viên thực hiện ngay khi đủ điều kiện',9,True)
 for i,r in enumerate(rules,1):para(str(i)+'. '+r.replace('⏹','[DỪNG]'))
 para('CỔNG 90 NGÀY — GO khi đạt; FIX chỉ một lần/vấn đề',9,True)
 pdf_table(['Ngày','Metric / ngưỡng','Bằng chứng tương lai / trượt'],[(g[0],g[1]+' '+g[2],g[3]+'; '+g[4]) for g in gates],[86,174,W-310])
@@ -163,6 +175,9 @@ checks={
  'unknowns_all_metrics':all(m[0] in unknown for m in metrics),
  'no_unverified_benchmarks':all(m[8]=='[MH]' for m in metrics),
  'page1_dashboard_page2_appendix':'KILL CRITERIA' in PdfReader(ROOT/'dashboard.pdf').pages[0].extract_text() and 'PHỤ LỤC [MH]' in PdfReader(ROOT/'dashboard.pdf').pages[1].extract_text(),
+ 'input_table_complete':all(s in inputs for s in ['ARPU','Gross margin','CAC dự kiến','payback mục tiêu','Runway','Value Metric','Cost/Job']),
+ 'classification_three_answers':all(s in worksheet for s in ['Ai trả tiền?','Ai dùng?','Có trung gian']),
+ 'one_primary_trigger_per_rule':all(r.count('NẾU')==1 and 'Nếu ' not in r for r in rules),
 }
 result={'scope':'Kiểm tra tài liệu và mô hình giả định; không chạy app hoặc đo thị trường','checks':checks,'passed':sum(checks.values()),'total':len(checks),'gates':dates}
 (ROOT/'evidence/validation.json').write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding='utf-8')

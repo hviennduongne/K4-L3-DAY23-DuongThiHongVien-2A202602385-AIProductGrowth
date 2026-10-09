@@ -2,7 +2,28 @@
 
 Dương Thị Hồng Viên · 2A202602385 · 09/10/2026
 
+## Chuẩn bị — Số liệu đầu vào
+
+Các số là giả định riêng cho bài thực hành, chưa phải số đã đo.
+
+| Đầu vào của mô hình giả định | Giá trị | Căn cứ |
+|---|---|---|
+| ARPU | 200.000đ/paid/tháng | Giá gói giả định; không tính free |
+| Gross margin mục tiêu | 60% | 20 triệu doanh thu −8 triệu COGS |
+| CAC dự kiến | 100.000đ/paid | 6.000đ/trial ÷6% conversion |
+| CAC payback mục tiêu | ≤1 tháng | Mục tiêu thu hồi chi phí thu hút trong tháng đầu |
+| CAC payback dự kiến | 0,833 tháng | 100.000 ÷(200.000 ×60%) |
+| Runway kịch bản không có doanh thu | 6 tháng | 180 triệu tiền mặt ÷30 triệu burn/tháng |
+| Value Metric | Thuê bao/tháng, quota250 phiên | Credit riêng cho lượt vượt quota |
+| Cost/Job | 400đ/phiên ôn5 câu | Chi phí AI giả định, gồm retry; hạ tầng/hỗ trợ tính riêng |
+
 ## Trạm 1 — Chốt loại
+
+**Câu chốt loại:** ÔnNhớ AI là B2C vì cá nhân tự trả phí và trực tiếp ôn tập, em chạm người dùng qua web ÔnNhớ AI và log tài khoản ẩn danh, không có doanh nghiệp hay đối tác trung gian trong tình huống này.
+
+- Ai trả tiền? Cá nhân mua gói ôn tập.
+- Ai dùng? Chính người mua.
+- Có trung gian và chạm end-user không? Không có trung gian; tiếp xúc trực tiếp qua web.
 
 Em dùng tình huống ÔnNhớ AI và số liệu giả định để thực hành Day 23. Day 24–25 là nội dung trong lộ trình chưa được học; các đầu vào dưới đây được đặt ngay trong bài này, chưa phải số thực đo.
 
@@ -32,7 +53,7 @@ Không có đèn ✅ thực đo. 🔧 nghĩa là có thể xây khả năng thu 
 North Star: L1, mức rơi retention D30→D60; hiện tại N/A, mục tiêu ≤2 điểm %. Đây là đại diện độ phẳng ngắn hạn, chưa chứng minh retention dài hạn.
 | ID | Tầng | Đèn | Định nghĩa và công thức | Nhịp / người đo | Báo trước cho | Luật |
 |---|---|---|---|---|---|---|
-| L1 | L | Mức rơi retention D30→D60 | max(0, R30−R60), điểm %; cohort đăng ký theo tuần, hoạt động = hoàn thành ≥1 phiên ôn 5 câu trong cửa sổ D24–30 / D54–60; loại test, bot, trùng ID; mẫu số cố định là user đăng ký ban đầu. | Tuần; Viên | Trial→paid, GM | 1 |
+| L1 | L | Mức rơi retention D30→D60 | max(0, R30−R60), điểm %; cohort đăng ký theo tuần, hoạt động = hoàn thành ≥1 phiên ôn 5 câu trong cửa sổ D24–30 / D54–60; loại test, bot, trùng ID; mẫu số cố định là user đăng ký ban đầu. | Tuần; Viên | GM các tháng tiếp theo | 1 |
 | L2 | L | Activation 24 giờ | User mới hoàn thành và xem giải thích phiên ôn 5 câu trong 24h / user mới hợp lệ; loại test, bot; không đếm mở app hoặc tạo bài chưa xong. | Ngày; Viên | Trial→paid | 5 |
 | L3 | L | p95 AI cost / ARPU | p95 nearest-rank của tổng chi phí AI mỗi user trả phí trong 30 ngày / 200.000đ; gồm lượt lỗi và retry có tính tiền, loại test; free đo riêng. | Tuần, cửa sổ 30 ngày; Viên | GM | 2 |
 | O1 | O | Trial→paid | User hết trial 7 ngày và có thanh toán thành công trong 7 ngày tiếp / user hết trial có cửa sổ đủ 14 ngày; loại test; trả phí tính một lần/user. | Tuần theo cohort đã chín; Viên | CAC payback, GM | 3 |
@@ -40,9 +61,10 @@ North Star: L1, mức rơi retention D30→D60; hiện tại N/A, mục tiêu �
 | O3 | O | Refund rate | Giao dịch thanh toán hoàn tiền toàn phần hoặc một phần trong 30 ngày / giao dịch thành công đã đủ cửa sổ 30 ngày; một giao dịch đếm một lần; loại test và thanh toán thất bại. | Tháng; Viên | GM, tiền thu ròng | 3 |
 | G1 | G | Gross margin | (Doanh thu thuần sau refund − toàn bộ COGS kể cả free) / doanh thu thuần; cùng kỳ, loại thuế thu hộ; không dùng doanh thu trước refund. | Tháng; Viên | Kết quả; đối chiếu L3/O2 | 2,4 |
 
-Cây tín hiệu: L1/L2 → O1 → G1; L3 → G1; O2/O3 → G1. Có 3 Leading, 3 Operating, 1 Lagging; L3 là đèn AI. G1 là kết quả đối chiếu, không gán cho nó khả năng dự báo.
+Cây tín hiệu: L2 → O1 → G1; L1 → G1 các tháng tiếp theo; L3 → G1; O2/O3 → G1. Có 3 Leading, 3 Operating, 1 Lagging; L3 là đèn AI. G1 là kết quả đối chiếu, không gán cho nó khả năng dự báo.
 
 ## Trạm 3 — Ngưỡng
+
 | ID | Xanh | Vàng | Đỏ | Nguồn | Lý do |
 |---|---|---|---|---|---|
 | L1 | ≤2 điểm % | >2 đến 5 điểm % | >5 điểm % | [MH] | 200 user: chấp nhận mất tối đa 10 người sau D30; mục tiêu chỉ mất 4. |
@@ -71,15 +93,20 @@ Ngưỡng [MH] tính từ đầu vào giả định của bài này. Dự báo 6
 
 2. NẾU L3 >50% TRONG 30 ngày VÀ có ≥100 user trả phí THÌ áp quota 250 phiên/tháng, chuyển lượt vượt quota sang gói credit trong 7 ngày; KHÔNG THÌ không tăng giá mọi user. Kiểm tra thêm nhóm top 5% để không bỏ sót đuôi sau p95.
 
-3. NẾU O1 <5% TRÊN 3 cohort trial đã chín VÀ mỗi cohort ≥100 user THÌ thử paywall sau phiên ôn thành công trong 14 ngày; KHÔNG THÌ không giảm giá gói. Nếu O3 >5% TRÊN ≥100 giao dịch đủ 30 ngày, xử lý 10 phản hồi refund và sửa lời hứa paywall trong 7 ngày, không che refund khỏi báo cáo.
+3. NẾU O1 <5% TRÊN 3 cohort trial đã chín VÀ mỗi cohort ≥100 user THÌ thử paywall sau phiên ôn thành công trong 14 ngày; KHÔNG THÌ không giảm giá gói.
 
 4. ⏹ NẾU O2 >25% TRONG 2 tháng liên tiếp VÀ mỗi tháng ≥100 paid THÌ dừng cấp quota free mới, giảm free xuống 3 phiên/tuần trong 7 ngày; KHÔNG THÌ không mở thêm free để lấy lượt đăng ký.
 
 5. NẾU L2 <40% TRONG 2 tuần liên tiếp VÀ mỗi tuần ≥100 user mới THÌ rút onboarding còn chọn chủ đề → ôn 5 câu, thử với 10 người trong 7 ngày; KHÔNG THÌ không thêm tính năng để che lỗi onboarding.
 
-Màu đỏ chỉ khởi động luật khi đủ thời gian/mẫu; mẫu thiếu ghi N/A. Không gộp cohort có mức giá hoặc quota khác nhau. O3 là guardrail bổ sung trong luật 3, G1 đỏ truy lại luật 2/4 và cập nhật mô hình.
+**Người thực hiện:** Viên ghi nhận dữ liệu và bắt đầu hành động trong tuần chỉ số đủ điều kiện đỏ; thời hạn hoàn thành ghi ngay trong từng luật. Luật 1 dừng ads ngay khi kích hoạt, dành21 ngày sửa phiên ôn; luật4 dừng quota mới ngay và hoàn tất chỉnh free trong7 ngày.
+
+Màu đỏ chỉ khởi động luật khi đủ thời gian/mẫu; mẫu thiếu ghi N/A. Không gộp cohort có mức giá hoặc quota khác nhau. O3 đỏ: Viên tổng hợp10 phản hồi hoàn tiền trong7 ngày và sửa lời hứa trên paywall; không bỏ giao dịch refund khỏi số liệu. G1 đỏ: Viên đối soát doanh thu/COGS trong7 ngày, xác định phần AI/free cần cắt theo luật2/4, không tăng ads để bù biên lãi. Đây là cách xử lý bổ sung của thẻ đèn, không thêm luật thứ6.
+
+**Quy ước đo:** các công thức tỷ lệ nhân100 để biểu diễn%; mẫu số0 hoặc cửa sổ chưa đủ thì N/A. p95 nearest-rank là giá trị thứceil(0,95×n) sau khi sắp chi phí tăng dần; chỉ dùng user trả phí có đủ30 ngày. ARPU trong L3 là mức giá giả định200.000đ; nếu giá/doanh thu đổi phải cập nhật mẫu số. L1 ởD60 không thể dự báo conversion đã xảy ra ởD14 của cùng cohort; nó giúp kiểm tra giả định giữ chân cho các cohort tuyển tiếp và GM/gia hạn tương lai.
 
 ## Trạm 5 — Cổng gác
+
 | Ngày | Một metric | Ngưỡng | Bằng chứng phải có | Nếu trượt |
 |---|---|---|---|---|
 | 30 · 08/11/2026 | Số user có bản ghi activation 24h đầy đủ (cả đạt và chưa đạt) | ≥200 | activation_baseline.csv + event_dictionary.md | FIX tracking 30 ngày nếu lỗi log; PIVOT kênh tuyển nếu không tuyển đủ |

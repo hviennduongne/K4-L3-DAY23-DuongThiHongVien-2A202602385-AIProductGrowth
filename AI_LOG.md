@@ -44,7 +44,9 @@ PDF có đúng 2 trang: trang đầu là dashboard, trang sau là giả định 
 
 Khi rà lại Trạm 5, em tách bảng đèn thành ba tầng và sửa quyết định ở cổng ngày 60 cho rõ: biết lỗi thì FIX, sai giả định thì PIVOT, đã FIX mà vẫn không đạt thì KILL. Em cũng thêm mẫu tối thiểu vào cổng ngày 90 và rút kill criteria thành một câu có số và ngày.
 
-Kết quả kiểm tra trên là kiểm tra tài liệu và phép tính. Các chỉ số hiện tại vẫn để N/A vì bài chưa có dữ liệu người dùng thực tế. Các luật xử lý và cổng 90 ngày là kế hoạch vận hành cho tình huống này.
+Ở lần kiểm tra cuối, em thêm bảng ARPU, GM, CAC, payback, runway và Cost/Job ngay đầu worksheet, rồi viết rõ ba câu trả lời để chốt B2C. Em tách phần xử lý refund ra khỏi luật 3 để mỗi luật có một điều kiện chính. Em cũng sửa đường liên hệ của retention: số đo ở D60 giúp báo trước kết quả những tháng tiếp theo, không thể báo trước conversion đã xảy ra ở D14 của cùng nhóm.
+
+Bản cuối đạt **26/26 kiểm tra**; PDF vẫn có dashboard một trang và phụ lục một trang. Kết quả kiểm tra trên là kiểm tra tài liệu và phép tính. Các chỉ số hiện tại vẫn để N/A vì bài chưa có dữ liệu người dùng thực tế. Các luật xử lý và cổng 90 ngày là kế hoạch vận hành cho tình huống này.
 
 ## 6. Điều em rút ra
 

@@ -4,13 +4,13 @@ Dương Thị Hồng Viên · 2A202602385 · B2C · 09/10/2026
 
 **TÌNH HUỐNG GIẢ ĐỊNH — chưa có dữ liệu thực đo.** Ngưỡng [MH] từ mô hình minh họa; số hiện tại N/A.
 
-**North Star:** L1, mức rơi D30→D60; mục tiêu ≤2 điểm %. Cá nhân tự trả tiền, tự dùng web.
+**North Star:** L1, mức rơi D30→D60; mục tiêu ≤2 điểm %. Cá nhân tự trả tiền và tự ôn trên web ÔnNhớ AI, không có trung gian.
 
 ## Leading — báo sớm
 
 | Đèn | Hiện | Xanh / Vàng / Đỏ | Nguồn và lý do | Báo trước |
 |---|---|---|---|---|
-| L1 Mức rơi retention D30→D60 | N/A | ≤2 điểm % / >2 đến 5 điểm % / >5 điểm % | [MH] 200 user: chấp nhận mất tối đa 10 người sau D30; mục tiêu chỉ mất 4. | Trial→paid, GM |
+| L1 Mức rơi retention D30→D60 | N/A | ≤2 điểm % / >2 đến 5 điểm % / >5 điểm % | [MH] 200 user: chấp nhận mất tối đa 10 người sau D30; mục tiêu chỉ mất 4. | GM các tháng tiếp theo |
 | L2 Activation 24 giờ | N/A | ≥60% / 40% đến <60% / <40% | [MH] 100 user/tuần; hỗ trợ được 40 người chưa activation, tối đa 60 khi dành thêm buổi hỗ trợ. | Trial→paid |
 | L3 p95 AI cost / ARPU | N/A | ≤40% / >40% đến 50% / >50% | [MH] GM mỗi user tối thiểu 40%, chi phí khác 10%: AI tối đa 50%; mục tiêu GM 50% cho nhóm nặng cho trần 40%. | GM |
 
@@ -28,13 +28,13 @@ Dương Thị Hồng Viên · 2A202602385 · B2C · 09/10/2026
 |---|---|---|---|---|
 | G1 Gross margin | N/A | ≥60% / 50% đến <60% / <50% | [MH] Mục tiêu giữ ≥12 triệu trên doanh thu thuần 20 triệu; mức sàn giữ 10 triệu để bù một phần chi phí cố định. | Kết quả; đối chiếu L3/O2 |
 
-## 5 luật (⏹ = dừng)
+## 5 luật (⏹ = dừng; Viên thực hiện ngay khi đủ điều kiện)
 
 1. ⏹ NẾU L1 >5 điểm % TRÊN 2 cohort liên tiếp đã đủ D60 VÀ mỗi cohort ≥200 user THÌ dừng ads 21 ngày, sửa phiên ôn đầu và nhắc ôn; KHÔNG THÌ không tăng ads để bù người rời.
 
 2. NẾU L3 >50% TRONG 30 ngày VÀ có ≥100 user trả phí THÌ áp quota 250 phiên/tháng, chuyển lượt vượt quota sang gói credit trong 7 ngày; KHÔNG THÌ không tăng giá mọi user. Kiểm tra thêm nhóm top 5% để không bỏ sót đuôi sau p95.
 
-3. NẾU O1 <5% TRÊN 3 cohort trial đã chín VÀ mỗi cohort ≥100 user THÌ thử paywall sau phiên ôn thành công trong 14 ngày; KHÔNG THÌ không giảm giá gói. Nếu O3 >5% TRÊN ≥100 giao dịch đủ 30 ngày, xử lý 10 phản hồi refund và sửa lời hứa paywall trong 7 ngày, không che refund khỏi báo cáo.
+3. NẾU O1 <5% TRÊN 3 cohort trial đã chín VÀ mỗi cohort ≥100 user THÌ thử paywall sau phiên ôn thành công trong 14 ngày; KHÔNG THÌ không giảm giá gói.
 
 4. ⏹ NẾU O2 >25% TRONG 2 tháng liên tiếp VÀ mỗi tháng ≥100 paid THÌ dừng cấp quota free mới, giảm free xuống 3 phiên/tuần trong 7 ngày; KHÔNG THÌ không mở thêm free để lấy lượt đăng ký.
 

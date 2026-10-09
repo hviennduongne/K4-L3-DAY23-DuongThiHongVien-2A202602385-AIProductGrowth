@@ -23,10 +23,13 @@
     "kill_number_date": true,
     "unknowns_all_metrics": true,
     "no_unverified_benchmarks": true,
-    "page1_dashboard_page2_appendix": true
+    "page1_dashboard_page2_appendix": true,
+    "input_table_complete": true,
+    "classification_three_answers": true,
+    "one_primary_trigger_per_rule": true
   },
-  "passed": 23,
-  "total": 23,
+  "passed": 26,
+  "total": 26,
   "gates": [
     "08/11/2026",
     "08/12/2026",
