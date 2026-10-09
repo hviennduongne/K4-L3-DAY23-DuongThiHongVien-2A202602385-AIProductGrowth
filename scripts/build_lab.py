@@ -126,7 +126,6 @@ def pdf_table(headers,rows,widths):
  t.drawOn(c,25,y-h);y-=h+6
 para('OPERATING DASHBOARD — ÔnNhớ AI',14,True)
 para(f'{NAME} · MSSV {SID} · B2C · 09/10/2026',9)
-para('TÌNH HUỐNG GIẢ ĐỊNH; chưa có user/log thật. Cá nhân tự trả tiền và dùng web. North Star L1: mức rơi D30→D60, mục tiêu ≤2 điểm %. Tất cả hiện tại N/A.',7.5,True)
 for tier,label in [('L','LEADING — báo sớm'),('O','OPERATING — vận hành'),('G','LAGGING — kết quả')]:
  para(label,8,True)
  pdf_table(['Đèn (hiện tại N/A)','Xanh / Vàng / Đỏ','Nguồn, lý do → kết quả'],[(m[0]+' '+m[2],' / '.join(m[5:8]),m[8]+' '+m[9]+' → '+m[10]) for m in metrics if m[1]==tier],[125,143,W-318])
